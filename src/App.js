@@ -6,6 +6,9 @@ import bg from './img/bg.png';
 import data from './data.js';
 import Item from './component/Item.js';
 import Detail from './pages/Detail.js';
+import About from './pages/About.js';
+import Event from './pages/Event';
+import axios from 'axios';
 
 function App() {
   let [shoes] = useState(data);
@@ -41,7 +44,6 @@ function App() {
           element={
             <>
               <div className='main-bg' style={{ backgroundImage: `url(${bg}))` }}></div>
-
               <div className='container'>
                 <div className='row'>
                   {shoes.map((item, idx) => {
@@ -49,10 +51,28 @@ function App() {
                   })}
                 </div>
               </div>
+              <button
+                onClick={() => {
+                  axios.get('https://codingapple1.github.io/shop/data2.json').then((res) => {
+                    console.log(res.data);
+                  });
+                }}
+              >
+                버튼
+              </button>
             </>
           }
         />
-        <Route path='/detail' element={<Detail />} />
+        <Route path='/detail/:id' element={<Detail shoes={shoes} />} />
+        <Route path='/about' element={<About />}>
+          <Route path='member' element={<div>멤버</div>} />
+          <Route path='location' element={<div>위치</div>} />
+        </Route>
+        <Route path='/event' element={<Event />}>
+          <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>} />
+          <Route path='two' element={<div>생일기념 쿠폰받기</div>} />
+        </Route>
+        <Route path='*' element={<div>없는페이지</div>} />
       </Routes>
     </div>
   );
