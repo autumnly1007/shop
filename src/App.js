@@ -10,9 +10,14 @@ import About from './pages/About.js';
 import Event from './pages/Event';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { createContext } from 'react';
+
+export let Context1 = createContext();
 
 function App() {
   let [shoes, setShoes] = useState(data);
+  let [stock, setStock] = useState([10, 11, 12]);
+  let [count, setCount] = useState(2);
   let navigate = useNavigate();
 
   return (
@@ -54,19 +59,42 @@ function App() {
               </div>
               <button
                 onClick={() => {
+                  if (count > 3) {
+                    alert('상품이 더 이상 존재하지 않습니다.');
+                    return;
+                  }
+
+                  // 로딩중 UI 보여주기
+
+                  // axios 가 JSON 을 array, object 로 자동으로 변환해줌
                   axios
-                    .get('https://codingapple1.github.io/shop/data2.json')
+                    .get(`https://codingapple1.github.io/shop/data${count}.json`)
                     .then((res) => {
-                      let copy = [...shoes];
+                      /*let copy = [...shoes];
                       res.data.forEach((item) => {
                         copy.push(item);
                       });
+                      */
+                      let copy = [...shoes, ...res.data];
                       console.log(copy);
                       setShoes(copy);
+                      setCount(count + 1);
+
+                      // 로딩중 UI 숨기기
                     })
                     .catch(() => {
                       console.log('fail');
+                      // 로딩중 UI 숨기기
                     });
+
+                  // fetch 사용 시 json 을 array/object 로 명시적 변환 해야함
+                  /*fetch('https://codingapple1.github.io/shop/data2.json')
+                    .then((결과) => 결과.json())
+                    .then((data) => {});
+                  */
+
+                  // 동시에 ajax 여러 개 요청하기
+                  //Promise.all([axios.get('/url1'), axios.get('/url2')]).then(() => {});
                 }}
               >
                 버튼
@@ -74,7 +102,14 @@ function App() {
             </>
           }
         />
-        <Route path='/detail/:id' element={<Detail shoes={shoes} />} />
+        <Route
+          path='/detail/:id'
+          element={
+            <Context1.Provider value={{ stock, shoes }}>
+              <Detail shoes={shoes} />
+            </Context1.Provider>
+          }
+        />
         <Route path='/about' element={<About />}>
           <Route path='member' element={<div>멤버</div>} />
           <Route path='location' element={<div>위치</div>} />
