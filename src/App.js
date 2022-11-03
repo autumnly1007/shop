@@ -9,9 +9,10 @@ import Detail from './pages/Detail.js';
 import About from './pages/About.js';
 import Event from './pages/Event';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 function App() {
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -53,9 +54,19 @@ function App() {
               </div>
               <button
                 onClick={() => {
-                  axios.get('https://codingapple1.github.io/shop/data2.json').then((res) => {
-                    console.log(res.data);
-                  });
+                  axios
+                    .get('https://codingapple1.github.io/shop/data2.json')
+                    .then((res) => {
+                      let copy = [...shoes];
+                      res.data.forEach((item) => {
+                        copy.push(item);
+                      });
+                      console.log(copy);
+                      setShoes(copy);
+                    })
+                    .catch(() => {
+                      console.log('fail');
+                    });
                 }}
               >
                 버튼
