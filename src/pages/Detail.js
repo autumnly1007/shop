@@ -13,12 +13,33 @@ function Detail(props) {
   let curItem = props.shoes.find((item) => item.id === Number(id));
   let [count, setCount] = useState(0);
   let [num, setNum] = useState('');
+  let [alert, setAlert] = useState(true);
 
   useEffect(() => {
     if (isNaN(num) == true) {
-      alert('숫자만 입력해 주세요.');
+      window.alert('숫자만 입력해 주세요.');
     }
+
+    let a = setTimeout(() => {
+      setAlert(false);
+    }, 2000);
+
+    // useEffect 실행 전에 return문이 실행됨
+    // 기존 로직 제거 시 유용함 (초기화)
+    return () => {
+      clearTimeout(a);
+    };
   }, [num]);
+
+  useEffect(() => {}); // 1. 재렌러딩 될 때 마다 코드를 실행해야 하는 경우
+  useEffect(() => {}, []); // 2. mount 시 1회만 코드를 실행해야 하는 경우 (dependency 비우기)
+  useEffect(() => {
+    return () => {
+      // 3. unmount 시 1회만 코드를 실행해야 하는 경우 (dependency 비우기)
+    };
+  }, []);
+  // 4. useEffect 실행 전에 무언가를 실행해야 하는 경우 return () => { }
+  // 5. 특정 state 만 변경해야 하는 경우 [state명] (dependency 설정)
 
   return (
     <div className='container'>
