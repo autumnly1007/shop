@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Nav } from 'react-bootstrap';
-import { Context1 } from './../App.js';
+import { useDispatch } from 'react-redux';
+import { insertItem } from '../store';
 
 let YellowBtn = styled.button`
   background: ${(props) => props.bg};
@@ -11,9 +12,6 @@ let YellowBtn = styled.button`
 `;
 
 function Detail(props) {
-  // object 형식으로 state 를 전달받음
-  const { stock, shoes } = useContext(Context1);
-
   let { id } = useParams();
   let curItem = props.shoes.find((item) => item.id === Number(id));
   let [count, setCount] = useState(0);
@@ -58,6 +56,9 @@ function Detail(props) {
   // 4. useEffect 실행 전에 무언가를 실행해야 하는 경우 return () => { }
   // 5. 특정 state 만 변경해야 하는 경우 [state명] (dependency 설정)
 
+  // store.js 에 요청을 보내주는 함수
+  let dispatch = useDispatch();
+
   return (
     <div className={`container start ${fade2}`}>
       <YellowBtn bg='blue'>버튼</YellowBtn>
@@ -85,7 +86,14 @@ function Detail(props) {
           <h4 className='pt-5'>{curItem.title}</h4>
           <p>{curItem.content}</p>
           <p>{curItem.price}원</p>
-          <button className='btn btn-danger'>주문하기</button>
+          <button
+            className='btn btn-danger'
+            onClick={() => {
+              dispatch(insertItem(curItem));
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
 
@@ -122,14 +130,13 @@ function Detail(props) {
         </Nav.Item>
       </Nav>
 
-      <TabContent tab={tab} />
+      <TabContent tab={tab} shoes={props.shoes} />
     </div>
   );
 }
 
-function TabContent({ tab }) {
+function TabContent({ tab, shoes }) {
   let [fade, setFade] = useState('');
-  let { stock, shoes } = useContext(Context1);
 
   useEffect(() => {
     // 리액트의 automatic batching 기능으로 인해 setTimeout 사용

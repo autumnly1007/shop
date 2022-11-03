@@ -7,16 +7,13 @@ import data from './data.js';
 import Item from './component/Item.js';
 import Detail from './pages/Detail.js';
 import About from './pages/About.js';
-import Event from './pages/Event';
+import Event from './pages/Event.js';
+import Cart from './pages/Cart.js';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { createContext } from 'react';
-
-export let Context1 = createContext();
 
 function App() {
   let [shoes, setShoes] = useState(data);
-  let [stock, setStock] = useState([10, 11, 12]);
   let [count, setCount] = useState(2);
   let navigate = useNavigate();
 
@@ -35,7 +32,7 @@ function App() {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate('/detail');
+                navigate('/cart');
               }}
             >
               Cart
@@ -102,14 +99,7 @@ function App() {
             </>
           }
         />
-        <Route
-          path='/detail/:id'
-          element={
-            <Context1.Provider value={{ stock, shoes }}>
-              <Detail shoes={shoes} />
-            </Context1.Provider>
-          }
-        />
+        <Route path='/detail/:id' element={<Detail shoes={shoes} />} />
         <Route path='/about' element={<About />}>
           <Route path='member' element={<div>멤버</div>} />
           <Route path='location' element={<div>위치</div>} />
@@ -118,6 +108,7 @@ function App() {
           <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>} />
           <Route path='two' element={<div>생일기념 쿠폰받기</div>} />
         </Route>
+        <Route path='/cart' element={<Cart />} />
         <Route path='*' element={<div>없는페이지</div>} />
       </Routes>
     </div>
