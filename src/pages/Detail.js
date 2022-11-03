@@ -46,6 +46,17 @@ function Detail(props) {
     };
   }, []);
 
+  useEffect(() => {
+    let watched = JSON.parse(localStorage.getItem('watched'));
+    watched.push(curItem.id);
+    watched = Array.from(new Set(watched));
+    localStorage.setItem('watched', JSON.stringify(watched));
+  });
+
+  // store.js 에 요청을 보내주는 함수
+  let dispatch = useDispatch();
+
+  /*
   useEffect(() => {}); // 1. 재렌더딩 될 때 마다 코드를 실행해야 하는 경우
   useEffect(() => {}, []); // 2. mount 시 1회만 코드를 실행해야 하는 경우 (dependency 비우기)
   useEffect(() => {
@@ -55,9 +66,7 @@ function Detail(props) {
   }, []);
   // 4. useEffect 실행 전에 무언가를 실행해야 하는 경우 return () => { }
   // 5. 특정 state 만 변경해야 하는 경우 [state명] (dependency 설정)
-
-  // store.js 에 요청을 보내주는 함수
-  let dispatch = useDispatch();
+  */
 
   return (
     <div className={`container start ${fade2}`}>

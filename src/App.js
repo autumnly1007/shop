@@ -17,6 +17,20 @@ function App() {
   let [count, setCount] = useState(2);
   let navigate = useNavigate();
 
+  // JSON.stringify()
+  let obj = { name: 'ahn' };
+  localStorage.setItem('data', JSON.stringify(obj));
+
+  // JSON.parse()
+  let getItem = localStorage.getItem('data');
+  //console.log(JSON.parse(getItem).name);
+
+  useEffect(() => {
+    if (!localStorage.getItem('watched')) {
+      localStorage.setItem('watched', JSON.stringify([]));
+    }
+  }, []);
+
   return (
     <div className='App'>
       <Navbar bg='light' variant='light'>

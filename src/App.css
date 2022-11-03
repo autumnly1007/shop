@@ -14,6 +14,10 @@
   background-position: center;
 }
 
+.item {
+  cursor: pointer;
+}
+
 .App {
   text-align: center;
 }
